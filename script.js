@@ -262,7 +262,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const whatsappInput = document.getElementById('whatsapp-input');
     if (whatsappInput) {
         whatsappInput.addEventListener('input', (e) => {
-            let value = e.target.value.replace(/\D/g, ''); // Remove tudo que não é dígito
+            let value = e.target.value.replace(/\\D/g, ''); // Remove tudo que não é dígito
             let formattedValue = '';
 
             if (value.length > 0) {
@@ -277,4 +277,58 @@ document.addEventListener('DOMContentLoaded', () => {
             e.target.value = formattedValue;
         });
     }
+
+    // Modal do Catálogo
+    const btnCatalogo = document.getElementById('btn-catalogo');
+    const modalCatalogo = document.getElementById('modal-catalogo');
+    const closeModal = document.querySelector('.close-modal');
+    const iframeCatalogo = document.getElementById('iframe-catalogo');
+    
+    const urlCatalogo = "Catálogo - Dia dos Pais 2026_compressed.pdf";
+    let catalogViewTimer = null; // Timer para rastrear tempo de visualização
+
+    if (btnCatalogo) {
+        btnCatalogo.addEventListener('click', (e) => {
+            e.preventDefault();
+            iframeCatalogo.src = urlCatalogo;
+            modalCatalogo.classList.add('active');
+            document.body.style.overflow = 'hidden';
+
+            // Inicia timer de 5 segundos para o Meta Pixel
+            catalogViewTimer = setTimeout(() => {
+                if (typeof fbq === 'function') {
+                    fbq('trackCustom', 'ViewedCatalog5s');
+                    console.log('Evento Meta Pixel: ViewedCatalog5s disparado (usuário viu por 5s)!');
+                }
+            }, 5000);
+        });
+    }
+
+    if (closeModal) {
+        closeModal.addEventListener('click', () => {
+            modalCatalogo.classList.remove('active');
+            document.body.style.overflow = '';
+            iframeCatalogo.src = '';
+            
+            // Cancela o timer se o usuário fechar antes dos 5 segundos
+            if (catalogViewTimer) {
+                clearTimeout(catalogViewTimer);
+                catalogViewTimer = null;
+            }
+        });
+    }
+
+    window.addEventListener('click', (e) => {
+        if (e.target === modalCatalogo) {
+            modalCatalogo.classList.remove('active');
+            document.body.style.overflow = '';
+            iframeCatalogo.src = '';
+
+            // Cancela o timer se o usuário fechar antes dos 5 segundos
+            if (catalogViewTimer) {
+                clearTimeout(catalogViewTimer);
+                catalogViewTimer = null;
+            }
+        }
+    });
 });
