@@ -221,8 +221,14 @@
     <section class="secao-formulario" id="formulario">
             <h2 class="titulo-formulario">Solicite seu Orçamento Personalizado</h2>
             <p class="subtitulo-formulario">Transforme brindes em gestos estratégicos de fidelização.</p>
-            <form id="formulario-lead" name="contato-secoli" data-netlify="true">
+            <form id="formulario-lead" name="contato-secoli" data-netlify="true" data-netlify-honeypot="bot-field">
                 <input type="hidden" name="form-name" value="contato-secoli">
+                
+                <!-- Campo Honeypot para evitar Spam (Invisível para humanos) -->
+                <div class="campo-honeypot">
+                    <label>Não preencha este campo</label>
+                    <input type="text" name="bot-field">
+                </div>
                 <div class="grupo-entrada">
                     <input type="text" id="nome" name="nome" placeholder="Ex: João Silva" required>
                     <label for="nome">Nome Completo</label>
